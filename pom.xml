@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<groupId>net.peachjean.packtory</groupId>
+	<artifactId>packtory</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javawriter</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.dagger</groupId>
+			<artifactId>dagger</artifactId>
+			<version>1.2.1</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-core</artifactId>
+			<version>0.7-groovy-2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.goldin</groupId>
+			<artifactId>spock-extensions</artifactId>
+			<version>0.1.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.peachjean.tater</groupId>
+			<artifactId>tater-test-harness</artifactId>
+			<version>0.3</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
