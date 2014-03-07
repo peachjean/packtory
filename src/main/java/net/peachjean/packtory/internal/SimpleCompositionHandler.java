@@ -34,7 +34,7 @@ public class SimpleCompositionHandler implements CompositionHandler
 	@Override
 	public boolean canComposeFactory(final FactorySpec spec, final ProcessingEnvironment processingEnvironment)
 	{
-		if(spec.getCompositions().size() != 1)
+		if (spec.getCompositions().size() != 1)
 		{
 			return false;
 		}
@@ -47,12 +47,12 @@ public class SimpleCompositionHandler implements CompositionHandler
 	{
 		final DeclaredType implementationType = (DeclaredType) spec.getCompositions().get(0);
 		final List<ExecutableElement> availableConstructors = new ArrayList<ExecutableElement>();
-		for(Element element: implementationType.asElement().getEnclosedElements())
+		for (Element element : implementationType.asElement().getEnclosedElements())
 		{
-			if(element.getKind() == ElementKind.CONSTRUCTOR)
+			if (element.getKind() == ElementKind.CONSTRUCTOR)
 			{
 				final Set<Modifier> modifiers = element.getModifiers();
-				if(modifiers.contains(Modifier.PRIVATE))
+				if (modifiers.contains(Modifier.PRIVATE))
 				{
 					continue;
 				}
@@ -62,29 +62,29 @@ public class SimpleCompositionHandler implements CompositionHandler
 				}
 			}
 		}
-		if(availableConstructors.size() == 0)
+		if (availableConstructors.size() == 0)
 		{
 			return null;
 		}
-		else if(availableConstructors.size() == 1)
+		else if (availableConstructors.size() == 1)
 		{
 			return getDepsFromConstructor(availableConstructors.get(0));
 		}
 		else
 		{
 			List<ExecutableElement> injectableConstructors = new ArrayList<ExecutableElement>();
-			for(ExecutableElement constructor: availableConstructors)
+			for (ExecutableElement constructor : availableConstructors)
 			{
-				if(constructor.getAnnotation(Inject.class) != null)
+				if (constructor.getAnnotation(Inject.class) != null)
 				{
 					injectableConstructors.add(constructor);
 				}
 			}
-			if(injectableConstructors.size() == 0)
+			if (injectableConstructors.size() == 0)
 			{
 				return null;
 			}
-			else if(injectableConstructors.size() > 1)
+			else if (injectableConstructors.size() > 1)
 			{
 				return null;
 			}
@@ -99,7 +99,7 @@ public class SimpleCompositionHandler implements CompositionHandler
 	{
 		final List<? extends VariableElement> parameters = constructor.getParameters();
 		List<TypeMirror> deps = new ArrayList<TypeMirror>();
-		for(VariableElement parameter: parameters)
+		for (VariableElement parameter : parameters)
 		{
 			deps.add(parameter.asType());
 		}
@@ -109,7 +109,7 @@ public class SimpleCompositionHandler implements CompositionHandler
 	@Override
 	public void writeFields(final JavaWriter javaWriter, final Map<TypeMirror, String> parameterNameMap) throws IOException
 	{
-		for(Map.Entry<TypeMirror, String> parameter: parameterNameMap.entrySet())
+		for (Map.Entry<TypeMirror, String> parameter : parameterNameMap.entrySet())
 		{
 			javaWriter.emitField(parameter.getKey().toString(), parameter.getValue(), PRIVATE_FINAL);
 		}
@@ -118,7 +118,7 @@ public class SimpleCompositionHandler implements CompositionHandler
 	@Override
 	public void writeConstructorBody(final JavaWriter javaWriter, final Map<TypeMirror, String> parameterNameMap) throws IOException
 	{
-		for(Map.Entry<TypeMirror, String> parameter: parameterNameMap.entrySet())
+		for (Map.Entry<TypeMirror, String> parameter : parameterNameMap.entrySet())
 		{
 			javaWriter.emitStatement("this.%s = %s", parameter.getValue(), parameter.getValue());
 		}
@@ -134,9 +134,9 @@ public class SimpleCompositionHandler implements CompositionHandler
 	private Object createParamList(final Map<TypeMirror, String> parameterNameMap)
 	{
 		StringBuffer sb = new StringBuffer();
-		for(String name: parameterNameMap.values())
+		for (String name : parameterNameMap.values())
 		{
-			if(sb.length() > 0)
+			if (sb.length() > 0)
 			{
 				sb.append(",");
 			}

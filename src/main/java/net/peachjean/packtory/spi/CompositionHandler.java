@@ -20,7 +20,6 @@ public interface CompositionHandler
 	List<TypeMirror> determineDependencies(FactorySpec spec, ProcessingEnvironment processingEnvironment);
 
 	/**
-	 *
 	 * @param javaWriter
 	 * @param parameterNameMap a map of types to parameter names, guaranteed to iterate in the same order as the
 	 *                         list returned by {@link #determineDependencies}.

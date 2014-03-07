@@ -59,17 +59,17 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 	@Override
 	public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv)
 	{
-		for(TypeElement annotationType: annotations)
+		for (TypeElement annotationType : annotations)
 		{
-			for(Element factoryPackage: roundEnv.getElementsAnnotatedWith(annotationType))
+			for (Element factoryPackage : roundEnv.getElementsAnnotatedWith(annotationType))
 			{
-				if(factoryPackage.getKind() != ElementKind.PACKAGE)
+				if (factoryPackage.getKind() != ElementKind.PACKAGE)
 				{
 					errorReporter.reportAnnotatedElementNotPackage(factoryPackage);
 				}
 				else
 				{
-					handlePackage((PackageElement)factoryPackage, annotationType);
+					handlePackage((PackageElement) factoryPackage, annotationType);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 	private void handlePackage(final PackageElement factoryPackage, final TypeElement annotationType)
 	{
 		final AnnotationMirror factoryAnnotation = locateAnnotationMirror(factoryPackage, annotationType);
-		if(factoryAnnotation == null)
+		if (factoryAnnotation == null)
 		{
 			// short circuit, if this is null then an error was reported and the compiler will handle failing
 			return;
@@ -102,22 +102,22 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 		TypeMirror entryPoint = null;
 		List<TypeMirror> compositions = new ArrayList<TypeMirror>();
 		String factoryName = "Factory";
-		for(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry: processingEnv.getElementUtils().getElementValuesWithDefaults(factoryAnnotation).entrySet())
+		for (Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : processingEnv.getElementUtils().getElementValuesWithDefaults(factoryAnnotation).entrySet())
 		{
 			final String name = entry.getKey().getSimpleName().toString();
-			if("entryPoint".equals(name))
+			if ("entryPoint".equals(name))
 			{
 				entryPoint = (TypeMirror) entry.getValue().getValue();
 			}
-			else if("composition".equals(name))
+			else if ("composition".equals(name))
 			{
 				final List<AnnotationValue> values = (List<AnnotationValue>) entry.getValue().getValue();
-				for(AnnotationValue value: values)
+				for (AnnotationValue value : values)
 				{
 					compositions.add((TypeMirror) value.getValue());
 				}
 			}
-			else if("factoryName".equals(name))
+			else if ("factoryName".equals(name))
 			{
 				factoryName = (String) entry.getValue().getValue();
 			}
@@ -127,9 +127,9 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 
 	private AnnotationMirror locateAnnotationMirror(final PackageElement factoryPackage, final TypeElement annotationType)
 	{
-		for(AnnotationMirror annotationMirror: factoryPackage.getAnnotationMirrors())
+		for (AnnotationMirror annotationMirror : factoryPackage.getAnnotationMirrors())
 		{
-			if(annotationMirror.getAnnotationType().equals(annotationType.asType()))
+			if (annotationMirror.getAnnotationType().equals(annotationType.asType()))
 			{
 				return annotationMirror;
 			}
@@ -152,7 +152,8 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 
 		public void reportFailureWritingSource(final IOException e, final CharSequence factoryClassName, final PackageElement factoryPackage)
 		{
-			processingEnv.getMessager().printMessage(Kind.ERROR, "Failed to write new factory source, " + factoryClassName + " due to IOException: " + e.getMessage(), factoryPackage);
+			processingEnv.getMessager()
+			             .printMessage(Kind.ERROR, "Failed to write new factory source, " + factoryClassName + " due to IOException: " + e.getMessage(), factoryPackage);
 		}
 	}
 }
