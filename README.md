@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/peachjean/packtory.png?branch=master)](https://travis-ci.org/peachjean/packtory)
+
 packtory
 ========
 
