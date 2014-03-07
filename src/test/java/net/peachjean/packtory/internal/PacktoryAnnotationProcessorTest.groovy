@@ -20,6 +20,7 @@ class PacktoryAnnotationProcessorTest extends Specification
 		when: "source is compiled"
 			def compilerResults = new CompilerHarness(tmpDir.getDir(), exampleSource).addProcessor(new PacktoryAnnotationProcessor()).invoke()
 			print compilerResults.getCompilerOutput()
+			print compilerResults.getDiagnostics()
 		then: "the compile succeeded"
 			compilerResults.isSuccessful()
 		then: "a factory is instantiable"

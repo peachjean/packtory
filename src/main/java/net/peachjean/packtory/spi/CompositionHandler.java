@@ -1,5 +1,6 @@
 package net.peachjean.packtory.spi;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +25,9 @@ public interface CompositionHandler
 	 * @param parameterNameMap a map of types to parameter names, guaranteed to iterate in the same order as the
 	 *                         list returned by {@link #determineDependencies}.
 	 */
-	void writeConstructorBody(JavaWriter javaWriter, Map<TypeMirror, String> parameterNameMap);
+	void writeConstructorBody(JavaWriter javaWriter, Map<TypeMirror, String> parameterNameMap) throws IOException;
 
-	void writeCreateMethodBody(JavaWriter javaWriter, TypeMirror returnType);
+	void writeFields(JavaWriter javaWriter, Map<TypeMirror, String> parameterNameMap) throws IOException;
+
+	void writeCreateMethodBody(JavaWriter javaWriter, TypeMirror returnType, FactorySpec spec, Map<TypeMirror, String> parameterNameMap) throws IOException;
 }

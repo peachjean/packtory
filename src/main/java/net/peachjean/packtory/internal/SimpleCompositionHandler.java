@@ -1,6 +1,9 @@
 package net.peachjean.packtory.internal;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +30,9 @@ import com.squareup.javawriter.JavaWriter;
  */
 public class SimpleCompositionHandler implements CompositionHandler
 {
+
+	private static final HashSet<Modifier> PRIVATE_FINAL = new HashSet<Modifier>(Arrays.asList(Modifier.FINAL, Modifier.PRIVATE));
+
 	@Override
 	public boolean canComposeFactory(final FactorySpec spec, final ProcessingEnvironment processingEnvironment)
 	{
@@ -103,14 +109,41 @@ public class SimpleCompositionHandler implements CompositionHandler
 	}
 
 	@Override
-	public void writeConstructorBody(final JavaWriter javaWriter, final Map<TypeMirror, String> parameterNameMap)
+	public void writeFields(final JavaWriter javaWriter, final Map<TypeMirror, String> parameterNameMap) throws IOException
 	{
-
+		for(Map.Entry<TypeMirror, String> parameter: parameterNameMap.entrySet())
+		{
+			javaWriter.emitField(parameter.getKey().toString(), parameter.getValue(), PRIVATE_FINAL);
+		}
 	}
 
 	@Override
-	public void writeCreateMethodBody(final JavaWriter javaWriter, final TypeMirror returnType)
+	public void writeConstructorBody(final JavaWriter javaWriter, final Map<TypeMirror, String> parameterNameMap) throws IOException
 	{
+		for(Map.Entry<TypeMirror, String> parameter: parameterNameMap.entrySet())
+		{
+			javaWriter.emitStatement("this.%s = %s", parameter.getValue(), parameter.getValue());
+		}
+	}
 
+	@Override
+	public void writeCreateMethodBody(final JavaWriter javaWriter, final TypeMirror returnType, final FactorySpec spec, final Map<TypeMirror,
+			String> parameterNameMap) throws IOException
+	{
+		javaWriter.emitStatement("return new %s(%s)", (DeclaredType) spec.getCompositions().get(0), createParamList(parameterNameMap));
+	}
+
+	private Object createParamList(final Map<TypeMirror, String> parameterNameMap)
+	{
+		StringBuffer sb = new StringBuffer();
+		for(String name: parameterNameMap.values())
+		{
+			if(sb.length() > 0)
+			{
+				sb.append(",");
+			}
+			sb.append(name);
+		}
+		return sb.toString();
 	}
 }
