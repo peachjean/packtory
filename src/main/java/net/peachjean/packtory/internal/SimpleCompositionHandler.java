@@ -23,9 +23,12 @@ import net.peachjean.packtory.spi.FactorySpec;
 
 import com.squareup.javawriter.JavaWriter;
 
+import org.kohsuke.MetaInfServices;
+
 /**
  * TODO: Document this class
  */
+@MetaInfServices
 public class SimpleCompositionHandler implements CompositionHandler
 {
 

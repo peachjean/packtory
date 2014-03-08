@@ -95,6 +95,10 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 			errorReporter.reportFailureWritingSource(e, factorySpec.getFullyQualifiedFactoryName(), factoryPackage);
 			return;
 		}
+		catch (NoApplicationCompositionHandler e)
+		{
+			errorReporter.reportNoCompositionHandler(e, factoryPackage);
+		}
 	}
 
 	private FactorySpec buildFactorySpec(final String packageName, final AnnotationMirror factoryAnnotation)
@@ -154,6 +158,12 @@ public class PacktoryAnnotationProcessor extends AbstractProcessor
 		{
 			processingEnv.getMessager()
 			             .printMessage(Kind.ERROR, "Failed to write new factory source, " + factoryClassName + " due to IOException: " + e.getMessage(), factoryPackage);
+		}
+
+		public void reportNoCompositionHandler(final NoApplicationCompositionHandler e, final PackageElement factoryPackage)
+		{
+			processingEnv.getMessager()
+			             .printMessage(Kind.ERROR, "Failed to locate a composition handler that could be applied to the package.", factoryPackage);
 		}
 	}
 }

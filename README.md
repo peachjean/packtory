@@ -96,7 +96,7 @@ As we add more interesting strategies, other than "a simple implementation class
 Todo
 ----
 
-* Make the DI strategy plugability actually work
+* ~~Make the DI strategy plugability actually work~~
 * Cleanup the CompositionHandler design
 * Support more DI strategies
   * Dagger

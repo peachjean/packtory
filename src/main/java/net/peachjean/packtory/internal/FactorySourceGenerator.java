@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -19,6 +20,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Inject;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 import net.peachjean.packtory.spi.CompositionHandler;
@@ -41,7 +43,7 @@ class FactorySourceGenerator
 		this.processingEnvironment = processingEnvironment;
 	}
 
-	public void generate(final FactorySpec factorySpec, final JavaFileObject sourceFile) throws IOException
+	public void generate(final FactorySpec factorySpec, final JavaFileObject sourceFile) throws IOException, NoApplicationCompositionHandler
 	{
 		CompositionHandler compositionHandler = locateCompositionHandler(factorySpec);
 		final JavaWriter javaWriter = new JavaWriter(sourceFile.openWriter());
@@ -99,12 +101,16 @@ class FactorySourceGenerator
 		return parameterNameMap;
 	}
 
-	private CompositionHandler locateCompositionHandler(final FactorySpec factorySpec)
+	private CompositionHandler locateCompositionHandler(final FactorySpec factorySpec) throws NoApplicationCompositionHandler
 	{
-		//TODO: use a service loader!
-		CompositionHandler handler = new SimpleCompositionHandler();
-		assert handler.canComposeFactory(factorySpec, this.processingEnvironment);
-		return handler;
+		for(CompositionHandler handler: ServiceLoader.load(CompositionHandler.class))
+		{
+			if(handler.canComposeFactory(factorySpec, this.processingEnvironment))
+			{
+				return handler;
+			}
+		}
+		throw new NoApplicationCompositionHandler(factorySpec);
 	}
 
 	private void writeCreateMethod(final TypeMirror entryPoint, final String methodName, final JavaWriter javaWriter, final FactorySpec factorySpec,
