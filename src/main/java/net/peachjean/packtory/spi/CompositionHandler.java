@@ -11,22 +11,20 @@ import javax.lang.model.type.TypeMirror;
 import com.squareup.javawriter.JavaWriter;
 
 /**
- * TODO: Document this class
+ * A stateful handler for the composition of a factory.
  */
 public interface CompositionHandler
 {
-	boolean canComposeFactory(FactorySpec spec, ProcessingEnvironment processingEnvironment);
-
-	List<TypeMirror> determineDependencies(FactorySpec spec, ProcessingEnvironment processingEnvironment);
-
 	/**
-	 * @param javaWriter
-	 * @param parameterNameMap a map of types to parameter names, guaranteed to iterate in the same order as the
-	 *                         list returned by {@link #determineDependencies}.
+	 * A map of this factory's dependencies. The keys are guaranteed to be used as the names of the constructor
+	 * parameters, in the order of iteration.
+	 * @return
 	 */
-	void writeConstructorBody(JavaWriter javaWriter, Map<TypeMirror, String> parameterNameMap) throws IOException;
+	Map<String, TypeMirror> getDependencies();
 
-	void writeFields(JavaWriter javaWriter, Map<TypeMirror, String> parameterNameMap) throws IOException;
+	void writeFields(JavaWriter javaWriter) throws IOException;
 
-	void writeCreateMethodBody(JavaWriter javaWriter, TypeMirror returnType, FactorySpec spec, Map<TypeMirror, String> parameterNameMap) throws IOException;
+	void writeConstructorBody(JavaWriter javaWriterparameterNameMap) throws IOException;
+
+	void writeCreateMethodBody(JavaWriter javaWriter, TypeMirror returnType) throws IOException;
 }

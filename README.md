@@ -97,7 +97,7 @@ Todo
 ----
 
 * ~~Make the DI strategy plugability actually work~~
-* Cleanup the CompositionHandler design
+* ~~Cleanup the CompositionHandler design~~
 * Support more DI strategies
   * Dagger
   * Guice
@@ -105,5 +105,7 @@ Todo
 * Dependency graph visualization
   * should treat packages as "subgraphs" with clear relationships
   * should recognize packtory packages and expand them, even if not in the same compile
+* Support multiple entry points
+  * This is a departure from the pattern, but it WILL come up.
 
 
