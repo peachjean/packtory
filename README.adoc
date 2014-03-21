@@ -13,8 +13,8 @@ to compose the objects that make it up, and dependent modules may use DI to pull
 exact flavor of DI that we use is an implementation detail of the package, and in no way restricts usage
 outside of our package.
 
-We basically generate a standard ``Factory`` class for package. This ``Factory`` class, using standard constructor-
-style injection, declares its dependencies and makes the entry point available via a no-arg, ``create`` method.
+We basically generate a standard +Factory+ class for package. This +Factory+ class, using standard constructor-
+style injection, declares its dependencies and makes the entry point available via a no-arg, +create+ method.
 
 I hope to be able to support multiple DI strategies within the package, and expose a simple utility for visualizing
 an entire object graph, that spans DI strategies.
@@ -34,7 +34,7 @@ public interface SimpleEntryPoint
 }
 ----
 
-.Create your implementation, ``SimpleEntryPointImpl.java``:
+.Create your implementation, +SimpleEntryPointImpl.java+:
 [source,java]
 ----
 package simple;
@@ -60,7 +60,7 @@ class SimpleEntryPointImpl implements SimpleEntryPoint
 }
 ----
 
-.Finally, create a ``package-info.java``:
+.Finally, create a +package-info.java+:
 [source,java]
 ----
 @Factory(entryPoint = SimpleEntryPoint.class, composition = SimpleEntryPointImpl.class)
@@ -69,7 +69,7 @@ package simple;
 import net.peachjean.packtory.Factory;
 ----
 
-.At compile time, ``packtory`` will create a factory for your package:
+.At compile time, +packtory+ will create a factory for your package:
 [source,java]
 ----
 package simple;
