@@ -34,6 +34,8 @@ public interface SimpleEntryPoint
 }
 ----
 
+=== Using Simple Implementation
+
 .Create your implementation, +SimpleEntryPointImpl.java+:
 [source,java]
 ----
@@ -90,7 +92,101 @@ public final class Factory {
 }
 ----
 
-As we add more interesting strategies, other than "a simple implementation class" this gets more interesting.
+=== Using Dagger
+
+.Create your implementation, +SimpleEntryPointImpl.java+, and make it injectable:
+[source,java]
+----
+package simple;
+
+import javax.inject.Inject;
+
+class SimpleEntryPointImpl implements SimpleEntryPoint
+{
+	private final String baseString;
+
+	@Inject
+	SimpleEntryPointImpl(final String baseString)
+	{
+		this.baseString = baseString;
+	}
+
+	public String getUpperCased()
+	{
+		return this.baseString.toUpperCase();
+	}
+
+	public String getLowerCased()
+	{
+		return this.baseString.toLowerCase();
+	}
+}
+----
+
+.Create your dagger module, +SimpleModule.java+:
+[source,java]
+----
+package simple;
+
+import dagger.Module;
+import dagger.Provides;
+
+@Module(injects=SimpleEntryPoint.class)
+class SimpleModule
+{
+	private final String baseString;
+
+	public SimpleModule(final String baseString)
+	{
+		this.baseString = baseString;
+	}
+
+	@Provides
+	String provideBaseString()
+	{
+		return this.baseString;
+	}
+
+	@Provides
+	public SimpleEntryPoint provideEntryPoint(SimpleEntryPointImpl impl)
+	{
+		return impl;
+	}
+}
+----
+
+.Finally, create a +package-info.java+:
+[source,java]
+----
+@Factory(entryPoint = SimpleEntryPoint.class, composition = SimpleModule.class)
+package simple;
+
+import net.peachjean.packtory.Factory;
+----
+
+.At compile time, +packtory+ will create a factory for your package:
+[source,java]
+----
+package simple;
+
+import dagger.ObjectGraph;
+
+@javax.annotation.Generated(value = "packtory", date = "2014-03-07T14:21-0600")
+public final class Factory {
+
+  private final ObjectGraph objectGraph;
+
+  @javax.inject.Inject
+  public Factory(String string) {
+    this.objectGraph = ObjectGraph.create(new SimpleModule(string));
+  }
+
+  public final SimpleEntryPoint create() {
+    return objectGraph.get(SimpleEntryPoint.class);
+  }
+}
+----
+
 
 == Todo
 
