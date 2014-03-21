@@ -1,12 +1,11 @@
-[![Build Status](https://travis-ci.org/peachjean/packtory.png?branch=master)](https://travis-ci.org/peachjean/packtory)
+image:https://travis-ci.org/peachjean/config-objects.svg?branch=master["Build Status", link="https://travis-ci.org/peachjean/config-objects"]
 
 packtory
 ========
 
 A simple utility for exposing well define package modules as factories.
 
-Point
------
+== Point
 
 This is basically a tool to easily enable a design pattern that I am currently toying with. The idea is to treat 
 packages as individual modules - they each have an entry point and dependencies. Within a package we may use DI
@@ -20,12 +19,11 @@ style injection, declares its dependencies and makes the entry point available v
 I hope to be able to support multiple DI strategies within the package, and expose a simple utility for visualizing
 an entire object graph, that spans DI strategies.
 
-Usage
------
+== Usage
 
-Create your entry point, ``SimpleEntryPoint.java``:
-
-```java
+.Create your entry point, +SimpleEntryPoint.java+:
+[source,java]
+----
 package simple;
 
 public interface SimpleEntryPoint
@@ -34,11 +32,11 @@ public interface SimpleEntryPoint
 
 	public String getLowerCased();
 }
-```
+----
 
-Create your implementation, ``SimpleEntryPointImpl.java``:
-
-```java
+.Create your implementation, ``SimpleEntryPointImpl.java``:
+[source,java]
+----
 package simple;
 
 class SimpleEntryPointImpl implements SimpleEntryPoint
@@ -60,20 +58,20 @@ class SimpleEntryPointImpl implements SimpleEntryPoint
 		return this.baseString.toLowerCase();
 	}
 }
-```
+----
 
-Finally, create a ``package-info.java``:
-
-```java
+.Finally, create a ``package-info.java``:
+[source,java]
+----
 @Factory(entryPoint = SimpleEntryPoint.class, composition = SimpleEntryPointImpl.class)
 package simple;
 
 import net.peachjean.packtory.Factory;
-```
+----
 
-At compile time, ``packtory`` will create a factory for your package:
-
-```java
+.At compile time, ``packtory`` will create a factory for your package:
+[source,java]
+----
 package simple;
 
 @javax.annotation.Generated(value = "packtory", date = "2014-03-07T14:21-0600")
@@ -90,15 +88,14 @@ public final class Factory {
     return new simple.SimpleEntryPointImpl(string);
   }
 }
-```
+----
 
 As we add more interesting strategies, other than "a simple implementation class" this gets more interesting.
 
-Todo
-----
+== Todo
 
-* ~~Make the DI strategy plugability actually work~~
-* ~~Cleanup the CompositionHandler design~~
+* *COMPLETE* Make the DI strategy plugability actually work
+* *COMPLETE* Cleanup the CompositionHandler design
 * Support more DI strategies
   * Dagger
   * Guice
