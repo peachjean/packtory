@@ -1,4 +1,5 @@
 image:https://travis-ci.org/peachjean/config-objects.svg?branch=master["Build Status", link="https://travis-ci.org/peachjean/config-objects"]
+image:https://coveralls.io/repos/peachjean/packtory/badge.png?branch=master["Coverage Status", link="https://coveralls.io/r/peachjean/packtory?branch=master"]
 
 packtory
 ========
